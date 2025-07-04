@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { API } from "../Utils/Constants";
-import ResCard from "./ResCard";
+import ResCard, { isOpen } from "./ResCard";
 import ShimerUI from "./ShimerUI";
+import { Link } from "react-router-dom";
 
 const Body = () => {
   const [searchTxt, setSearchTxt] = useState("");
   const [resList, setResList] = useState([]);
   const [filteredlist, setFilteredList] = useState([]);
 
+  const ResCardPromoted = isOpen(ResCard);
   async function fetchData() {
     const data = await fetch(API);
     const json = await data.json();
@@ -81,7 +83,19 @@ const Body = () => {
       </div>
       <div className="grid grid-cols-6 ">
         {filteredlist.map((restaurant) => {
-          return <ResCard key={restaurant.info.id} resData={restaurant} />;
+          return (
+            //restaurant.info.isOpen
+            <Link
+              key={restaurant.info.id}
+              to={"/restaurant/" + restaurant.info.id}
+            >
+              {restaurant.info.isOpen ? (
+                <ResCardPromoted resData={restaurant} />
+              ) : (
+                <ResCard resData={restaurant} />
+              )}
+            </Link>
+          );
         })}
       </div>
     </>

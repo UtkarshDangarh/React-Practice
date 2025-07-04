@@ -1,13 +1,14 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Body from "./Components/Body.jsx";
-import About from "./Components/About.jsx";
 import Cart from "./Components/Cart.jsx";
 import Contact from "./Components/Contact.jsx";
 import App from "./App.jsx";
+import Restaurant from "./Components/Restaurant.jsx";
 
+const About = lazy(() => import("./Components/About.jsx"));
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -19,7 +20,11 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/about",
-        element: <About />,
+        element: (
+          <Suspense fallback={<h1>Loading....</h1>}>
+            <About />
+          </Suspense>
+        ),
       },
       {
         path: "/contact",
@@ -28,6 +33,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />,
+      },
+      {
+        path: "/restaurant/:resID",
+        element: <Restaurant />,
       },
     ],
   },
